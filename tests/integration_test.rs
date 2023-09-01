@@ -9,10 +9,10 @@ use futures::StreamExt;
 use tower::Service;
 
 use tokio_tungstenite::tungstenite;
-use offchain_auction::api::app;
-use offchain_auction::config::Config;
-use offchain_auction::db::DB;
-use offchain_auction::models::RFQ;
+use moo_solver::api::app;
+use moo_solver::config::Config;
+use moo_solver::db::DB;
+use moo_solver::models::RFQ;
 
 fn mock_order() -> serde_json::Value {
     json!({
