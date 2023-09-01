@@ -6,7 +6,7 @@ use {
 };
 
 #[serde_as]
-#[derive(Clone, Debug, Default, Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, Serialize)]
 pub struct TokenInfoModel {
     pub decimals: Option<u8>,
     pub alias: Option<String>,
@@ -14,8 +14,6 @@ pub struct TokenInfoModel {
     pub normalize_priority: Option<u64>,
     #[serde_as(as = "Option<DecimalU256>")]
     pub internal_buffer: Option<U256>,
-    /// Is token in the external list containing only safe tokens
-    pub accepted_for_internalization: bool,
 }
 
 #[derive(Clone, Debug, Default, Eq, PartialEq, Serialize, Deserialize)]

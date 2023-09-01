@@ -11,16 +11,16 @@ use {
         }
     },
 };
+pub type AmmId = i64;
 
-#[derive(Clone, Debug, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize)]
 pub enum AmmKind {
     ConstantProduct,
     WeightedProduct,
     Stable
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct ConstantProductReservesModel;
+pub type ConstantProductReservesModel = U256;
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct WeightedProductReservesModel {
@@ -31,20 +31,17 @@ pub struct WeightedProductReservesModel {
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(untagged)]
 pub enum ReservesModel {
     ConstantProduct(ConstantProductReservesModel),
     WeightedProduct(WeightedProductReservesModel),
 }
 
-#[derive(Clone, Debug, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct AmmModel {
     kind: AmmKind,
     reserves: BTreeMap<H160, ReservesModel>,
-    // #[serde(flatten)]
-    // pub parameters: AmmParameters,
     #[serde(with = "ratio_as_decimal")]
     pub fee: BigRational,
     pub cost: TokenAmount,
-    // pub mandatory: bool,
-    // pub address: H160,
 }

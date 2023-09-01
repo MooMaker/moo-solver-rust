@@ -41,8 +41,7 @@ pub fn app(db: DB) -> Router {
 
     // build our application with a route
     Router::new()
-        // .route("/api/orders", post(handlers::orders::create))
-        // .route("/api/orders/:id",get(handlers::orders::get))
+        .route("/solve", post(handlers::solver::solve))
         .route("/ws", get(handlers::ws::ws_handler))
         .with_state(state)
 }

@@ -1,2 +1,2 @@
-pub mod orders;
+pub mod solver;
 pub mod ws;
