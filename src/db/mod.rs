@@ -1,7 +1,6 @@
 use redis::{RedisError};
 use redis::AsyncCommands;
 use crate::config::Config;
-use crate::models::RFQ;
 
 #[derive(Clone)]
 pub struct DB {
@@ -25,24 +24,24 @@ impl DB {
         }
     }
 
-    pub async fn create_rqf(&mut self, rfq: &RFQ) -> Result<(), RedisError> {
-        let id = &rfq.id;
-
-        let value = serde_json::to_string(rfq).unwrap();
-
-        let key = format!("{}{}{}", TABLE_RFQS, SEPARATOR, id);
-
-        let _:() = self.connection.set(&key, value).await?;
-        let _:() = self.connection.expire(key, rfq.time_limit as usize).await?;
-        Ok(())
-    }
-
-    pub async fn get_rfq(&mut self, id: &str) -> Result<Option<RFQ>, RedisError> {
-        let key = format!("{}{}{}", TABLE_RFQS, SEPARATOR, id);
-        let value: Option<String> = self.connection.get(&key).await?;
-
-        Ok(value
-            .map(|v| serde_json::from_str(&v).unwrap())
-        )
-    }
+    // pub async fn create_rqf(&mut self, rfq: &RFQ) -> Result<(), RedisError> {
+    //     let id = &rfq.id;
+    //
+    //     let value = serde_json::to_string(rfq).unwrap();
+    //
+    //     let key = format!("{}{}{}", TABLE_RFQS, SEPARATOR, id);
+    //
+    //     let _:() = self.connection.set(&key, value).await?;
+    //     let _:() = self.connection.expire(key, rfq.time_limit as usize).await?;
+    //     Ok(())
+    // }
+    //
+    // pub async fn get_rfq(&mut self, id: &str) -> Result<Option<RFQ>, RedisError> {
+    //     let key = format!("{}{}{}", TABLE_RFQS, SEPARATOR, id);
+    //     let value: Option<String> = self.connection.get(&key).await?;
+    //
+    //     Ok(value
+    //         .map(|v| serde_json::from_str(&v).unwrap())
+    //     )
+    // }
 }
