@@ -24,5 +24,5 @@ pub struct BatchAuctionModel {
     pub tokens: BTreeMap<H160, TokenInfoModel>,
     pub orders: BTreeMap<usize, OrderModel>,
     pub amms: BTreeMap<AmmId, AmmModel>,
-    pub metadata: Option<MetadataModel>,
+    pub metadata: MetadataModel,
 }

@@ -1,24 +1,42 @@
-use serde::{Deserialize};
 use {
+    std::fmt::Display,
     axum::{
         http::StatusCode,
         response::IntoResponse,
         Json,
-        extract::{State},
+        extract::{State, Query}
     },
+    serde::{Deserialize},
     crate::{
         api::Context,
-        models::auction::BatchAuctionModel
+        models::auction::{BatchAuctionModel, AuctionId}
     },
+    super::solver_args::SolverArgs
 };
-use axum::extract::Path;
-use axum::extract::ws::Message;
-use futures::SinkExt;
 
-pub async fn solve(State(mut state): State<Context>, Json(payload): Json<BatchAuctionModel>) -> impl IntoResponse
+#[derive(Debug, Deserialize)]
+pub struct SolveQueryParams {
+    pub instance_name: Option<String>,
+    pub time_limit: Option<u32>,
+    pub max_nr_exec_orders: Option<u32>,
+    pub use_internal_buffers: Option<bool>,
+    pub use_external_prices: Option<bool>,
+    pub auction_id: Option<AuctionId>
+}
+
+pub async fn solve(
+    Query(params): Query<SolveQueryParams>,
+    State(mut state): State<Context>,
+    Json(payload): Json<BatchAuctionModel>,
+) -> impl IntoResponse
 {
-    println!("Solve request received");
-    println!("Payload: {:?}", payload);
+    println!("Received solving request with params: {:?}", &params);
+
+    let solver_args = SolverArgs::new(&params, &payload.metadata);
+
+    println!("Running solver with args: {:?}", &solver_args);
+    // println!("Params: {:?}", params);
+    // println!("Payload: {:?}", payload);
     // Generate RFQ id
     // let rfq_id = uuid::Uuid::new_v4();
     //
@@ -53,3 +71,4 @@ pub async fn solve(State(mut state): State<Context>, Json(payload): Json<BatchAu
     // (StatusCode::CREATED).into_response()
     StatusCode::CREATED
 }
+
