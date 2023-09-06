@@ -50,7 +50,10 @@ pub async fn solve(
         ).into_response();
     }
 
-    (StatusCode::OK, Json(SettledBatchAuctionModel::from(&batch_auction)))
+    let settled_batch_auction = SettledBatchAuctionModel::from(&batch_auction);
+    println!("Settled Batch Auction: {:?}", settled_batch_auction);
+
+    (StatusCode::OK, Json(settled_batch_auction))
         .into_response()
 }
 
