@@ -26,3 +26,11 @@ pub struct OrderModel {
     pub is_liquidity_order: bool,
     pub has_atomic_execution: Option<bool>,
 }
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct ExecutedOrderModel {
+    #[serde(with = "u256_decimal")]
+    pub exec_sell_amount: U256,
+    #[serde(with = "u256_decimal")]
+    pub exec_buy_amount: U256,
+}

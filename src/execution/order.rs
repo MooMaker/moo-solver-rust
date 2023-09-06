@@ -6,7 +6,7 @@ use {
             xrate::XRate,
             errors::OrderError
         },
-        models::order::OrderModel,
+        models::order::{OrderModel, ExecutedOrderModel},
         utils::conversion::u256_to_big_rational
     }
 };
@@ -90,6 +90,11 @@ impl<'a> Order<'a> {
             None
         }
     }
+
+    pub fn is_executed(&self) -> bool {
+        self.exec_buy_amount.is_some() && self.exec_sell_amount.is_some()
+    }
+
 
     /// Executes the order at given amounts.
     ///
@@ -220,5 +225,14 @@ impl<'a> Order<'a> {
         let converted_sell = self.max_limit.convert_unit(self.model.buy_token);
 
         converted_buy <= converted_sell * (BigRational::one() + xrate_tol.clone())
+    }
+}
+
+impl From<&Order<'_>> for ExecutedOrderModel {
+    fn from(value: &Order) -> Self {
+        Self {
+            exec_buy_amount: value.exec_buy_amount.unwrap_or(U256::zero()),
+            exec_sell_amount: value.exec_sell_amount.unwrap_or(U256::zero()),
+        }
     }
 }

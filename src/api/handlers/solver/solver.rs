@@ -7,7 +7,7 @@ use {
     },
     serde::{Deserialize},
     crate::{
-        models::auction::{BatchAuctionModel, AuctionId},
+        models::auction::{BatchAuctionModel, SettledBatchAuctionModel, AuctionId},
         execution::batch_auction::BatchAuction,
     },
     super::solver_args::SolverArgs
@@ -50,6 +50,7 @@ pub async fn solve(
         ).into_response();
     }
 
-    (StatusCode::OK).into_response()
+    (StatusCode::OK, Json(SettledBatchAuctionModel::from(&batch_auction)))
+        .into_response()
 }
 
